@@ -8,6 +8,9 @@ package calc;
  */
 public class CalcEngine
 {
+    MyStack<String> opandStack = new MyStack<String>();
+    MyStack<String> operatorStack = new MyStack<String>();
+
     char operator;
     int displayValue, operand1;
 
@@ -107,6 +110,7 @@ public class CalcEngine
         operand1 = 0;
 
     }
+
 
     /**
      * Return the title of this calculation engine.

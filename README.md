@@ -21,7 +21,7 @@ This is the main class. It creates a calculation engine (CalcEngine) and a user 
 ###UserInterface
 This class provides the user interface of the calculator: the window on screen, the buttons, etc. Modify this class so that the calculator has 5 rows, each of which has 4 buttons:
 
->|  |  |  |   |
+|  |  |  |   |
 |:-------------:|:-------------:|:-------------:|:-------------:|
 | C | ( | ) | / |
 | 7 | 8 | 9 | * |

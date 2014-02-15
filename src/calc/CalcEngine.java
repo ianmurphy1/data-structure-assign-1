@@ -1,5 +1,7 @@
 package calc;
 
+import java.util.Stack;
+
 /**
  * The main part of the calculator doing the calculations.
  *
@@ -10,6 +12,9 @@ public class CalcEngine
 {
     MyStack<String> opandStack = new MyStack<String>();
     MyStack<String> operatorStack = new MyStack<String>();
+
+    Stack<String> aponStack = new Stack<String>();
+    Stack<String> operStack = new Stack<String>();
 
     char operator;
     int displayValue, operand1;
@@ -40,7 +45,7 @@ public class CalcEngine
      */
     public void numberPressed(int number)
     {
-        displayValue = displayValue *10 + number;
+        displayValue = displayValue * 10 + number;
     }
 
     /**

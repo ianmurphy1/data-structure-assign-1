@@ -106,7 +106,7 @@ public class MyStack<Item> implements Iterable<Item> {
 
     /**
      * Helper class, represents a stack frame.
-     * Holds an object and a reference to the next item on the Stack.
+     * Holds an object and a reference to the next Frame on the Stack.
      *
      * @param <Item>
      */

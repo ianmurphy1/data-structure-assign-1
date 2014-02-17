@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 public class MyStack<Item> implements Iterable<Item> {
 
     private int count;
-    private Node<Item> top;
+    private Frame<Item> top;
 
     public MyStack() {
         int count = 0;
@@ -21,8 +21,8 @@ public class MyStack<Item> implements Iterable<Item> {
     public boolean isEmpty() { return top == null; }
 
     public void push(Item item) {
-        Node<Item> current = top;
-        top = new Node<Item>();
+        Frame<Item> current = top;
+        top = new Frame<Item>();
         top.item = item;
         top.next = current;
         count++;
@@ -41,17 +41,22 @@ public class MyStack<Item> implements Iterable<Item> {
         return top.item;
     }
 
+    public int size() {
+        return count;
+    }
+
+
     @Override
     public Iterator<Item> iterator() { return new ListIterator<Item>(top); }
 
     private class ListIterator<Item> implements Iterator<Item> {
 
-        private Node<Item> current;
+        private Frame<Item> current;
 
-        public ListIterator(Node<Item> first) { current = first; }
+        public ListIterator(Frame<Item> first) { current = first; }
 
         @Override
-        public boolean hasNext() { return top != null; }
+        public boolean hasNext() { return current != null; }
 
         @Override
         public Item next() {
@@ -66,8 +71,8 @@ public class MyStack<Item> implements Iterable<Item> {
     }
 
 
-    private static class Node<Item> {
+    private static class Frame<Item> {
         Item item;
-        Node next;
+        Frame<Item> next;
     }
 }

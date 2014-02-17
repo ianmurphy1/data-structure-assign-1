@@ -60,7 +60,7 @@ public class MyStack<Item> implements Iterable<Item> {
 
         @Override
         public Item next() {
-            if (!hasNext()) throw new NoSuchElementException("Stack is Empty!");
+            if (!hasNext()) throw new NoSuchElementException();
             Item item = current.item;
             current = current.next;
             return item;

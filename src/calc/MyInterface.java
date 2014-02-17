@@ -8,6 +8,11 @@ import javafx.stage.Stage;
  *         Date: 15/02/14
  */
 public class MyInterface extends Application {
+
+    public static void main(String[] args) {
+        Application.launch(args);
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
 

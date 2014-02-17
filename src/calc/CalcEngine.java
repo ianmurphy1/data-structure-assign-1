@@ -13,7 +13,7 @@ public class CalcEngine
     MyStack<String> opandStack = new MyStack<String>();
     MyStack<String> operatorStack = new MyStack<String>();
 
-    Stack<String> aponStack = new Stack<String>();
+    Stack<String> opanStack = new Stack<String>();
     Stack<String> operStack = new Stack<String>();
 
     char operator;

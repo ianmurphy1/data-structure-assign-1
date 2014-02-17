@@ -5,8 +5,11 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 /**
+ * Custom Stack that uses a singly linked list to hold an Item on the
+ * stack and to keep track of the items on the Stack.
+ *
  * @author Ian Murphy - 20057028
- *         Date: 15/02/14
+ *
  */
 public class MyStack<Item> implements Iterable<Item> {
 
@@ -20,6 +23,11 @@ public class MyStack<Item> implements Iterable<Item> {
 
     public boolean isEmpty() { return top == null; }
 
+    /**
+     * Method that adds an item onto the Stack.
+     *
+     * @param item Item to be added.
+     */
     public void push(Item item) {
         Frame<Item> current = top;
         top = new Frame<Item>();
@@ -28,6 +36,11 @@ public class MyStack<Item> implements Iterable<Item> {
         count++;
     }
 
+    /**
+     * Returns and removes the last item added on the top of the Stack.
+     *
+     * @return Last item on the Stack.
+     */
     public Item pop() {
         if (isEmpty()) throw new NoSuchElementException("Stack is Empty!");
         Item item = top.item;
@@ -36,19 +49,40 @@ public class MyStack<Item> implements Iterable<Item> {
         return item;
     }
 
+    /**
+     * Returns but does not remove the item last added to the Stack.
+     *
+     * @return Last item on the Stack.
+     */
     public Item peek() {
         if (isEmpty()) throw new NoSuchElementException("Stack is Empty!");
         return top.item;
     }
 
-    public int size() {
-        return count;
-    }
+    /**
+     * Method that returns the amount of stack frames on the stack.
+     *
+     * @return The amount of frames on the Stack.
+     */
+    public int size() { return count; }
 
-
+    /**
+     * Method that returns an iterator that iterates through the stack
+     * on a First-In-Last-Out basis.
+     *
+     * @return Iterator that iterates LIFO order.
+     */
     @Override
     public Iterator<Item> iterator() { return new ListIterator<Item>(top); }
 
+
+    /**
+     * Iterator class that implements an Iterator.
+     * Doesn't implement remove(), as it's operation is carried out by
+     * pop() in MyStack.
+     *
+     * @param <Item>
+     */
     private class ListIterator<Item> implements Iterator<Item> {
 
         private Frame<Item> current;
@@ -70,7 +104,12 @@ public class MyStack<Item> implements Iterable<Item> {
         public void remove() { throw new UnsupportedOperationException("Not supported, use pop()");}
     }
 
-
+    /**
+     * Helper class, represents a stack frame.
+     * Holds an object and a reference to the next item on the Stack.
+     *
+     * @param <Item>
+     */
     private static class Frame<Item> {
         Item item;
         Frame<Item> next;

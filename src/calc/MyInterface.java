@@ -4,8 +4,9 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
+ * Class that forms the basis of a custom UI built with JavaFX.
+ *
  * @author Ian Murphy - 20057028
- *         Date: 15/02/14
  */
 public class MyInterface extends Application {
 

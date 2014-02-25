@@ -29,10 +29,10 @@ public class MyStack<Item> implements Iterable<Item> {
      * @param item Item to be added.
      */
     public void push(Item item) {
-        Frame<Item> current = top;
+        Frame<Item> oldTop = top;
         top = new Frame<Item>();
         top.item = item;
-        top.next = current;
+        top.next = oldTop;
         count++;
     }
 
@@ -65,6 +65,18 @@ public class MyStack<Item> implements Iterable<Item> {
      * @return The amount of frames on the Stack.
      */
     public int size() { return count; }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder();
+        for (Item item : this)
+            s.append(item + " ");
+        return s.toString();
+    }
 
     /**
      * Method that returns an iterator that iterates through the stack

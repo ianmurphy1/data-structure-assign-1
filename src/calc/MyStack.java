@@ -101,7 +101,7 @@ public class MyStack<Item> implements Iterable<Item> {
         }
 
         @Override
-        public void remove() { throw new UnsupportedOperationException("Not supported, use pop()");}
+        public void remove() { throw new UnsupportedOperationException("Not supported, use pop()"); }
     }
 
     /**

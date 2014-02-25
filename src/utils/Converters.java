@@ -116,7 +116,7 @@ public class Converters {
         //    sb.append(outStack.pop());
          //   sb.append(" ");
         //}
-        return sb.toString();
+        return sb.reverse().toString();
     }
 
     public static String postfixToInfix(String s) {

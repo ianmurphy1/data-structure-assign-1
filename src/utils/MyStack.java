@@ -11,10 +11,10 @@ import java.util.NoSuchElementException;
  * @author Ian Murphy - 20057028
  *
  */
-public class MyStack<T> implements Iterable<T> {
+public class MyStack<E> implements Iterable<E> {
 
     private int count;
-    private Frame<T> top;
+    private Frame<E> top;
 
     public MyStack() {
         int count = 0;
@@ -28,9 +28,9 @@ public class MyStack<T> implements Iterable<T> {
      *
      * @param item Item to be added.
      */
-    public void push(T item) {
-        Frame<T> oldTop = top;
-        top = new Frame<T>();
+    public void push(E item) {
+        Frame<E> oldTop = top;
+        top = new Frame<E>();
         top.item = item;
         top.next = oldTop;
         count++;
@@ -41,9 +41,9 @@ public class MyStack<T> implements Iterable<T> {
      *
      * @return Last item on the Stack.
      */
-    public T pop() {
+    public E pop() {
         if (isEmpty()) throw new NoSuchElementException("Stack is Empty!");
-        T item = top.item;
+        E item = top.item;
         top = top.next;
         count--;
         return item;
@@ -54,7 +54,7 @@ public class MyStack<T> implements Iterable<T> {
      *
      * @return Last item on the Stack.
      */
-    public T peek() {
+    public E peek() {
         if (isEmpty()) throw new NoSuchElementException("Stack is Empty!");
         return top.item;
     }
@@ -73,7 +73,7 @@ public class MyStack<T> implements Iterable<T> {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        for (T item : this)
+        for (E item : this)
             s.append(item + " ");
         return s.toString();
     }
@@ -85,7 +85,7 @@ public class MyStack<T> implements Iterable<T> {
      * @return Iterator that iterates LIFO order.
      */
     @Override
-    public Iterator<T> iterator() { return new ListIterator<T>(top); }
+    public Iterator<E> iterator() { return new ListIterator<E>(top); }
 
 
     /**
@@ -93,21 +93,21 @@ public class MyStack<T> implements Iterable<T> {
      * Doesn't implement remove(), as it's operation is carried out by
      * pop() in MyStack.
      *
-     * @param <T>
+     * @param <E>
      */
-    private class ListIterator<T> implements Iterator<T> {
+    private class ListIterator<E> implements Iterator<E> {
 
-        private Frame<T> current;
+        private Frame<E> current;
 
-        public ListIterator(Frame<T> first) { current = first; }
+        public ListIterator(Frame<E> first) { current = first; }
 
         @Override
         public boolean hasNext() { return current != null; }
 
         @Override
-        public T next() {
+        public E next() {
             if (!hasNext()) throw new NoSuchElementException();
-            T item = current.item;
+            E item = current.item;
             current = current.next;
             return item;
         }
@@ -120,10 +120,10 @@ public class MyStack<T> implements Iterable<T> {
      * Helper class, represents a stack frame.
      * Holds an object and a reference to the next Frame on the Stack.
      *
-     * @param <T>
+     * @param <E>
      */
-    private static class Frame<T> {
-        T item;
-        Frame<T> next;
+    private static class Frame<E> {
+        E item;
+        Frame<E> next;
     }
 }

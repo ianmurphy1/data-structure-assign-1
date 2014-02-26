@@ -48,7 +48,7 @@ public class Converters {
      * @throws IllegalArgumentException
      */
     private static boolean isAssoc(String token, int type) throws IllegalArgumentException{
-        if (!isOperator(token)) throw new IllegalArgumentException("Not a valid token" + token);
+        if (!isOperator(token)) throw new IllegalArgumentException("Not a valid token: " + token);
         if (OPERATORS.get(token)[1] == type) return true;
         return false;
     }

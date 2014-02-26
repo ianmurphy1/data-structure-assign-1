@@ -1,7 +1,5 @@
 package utils;
 
-import calc.MyStack;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -13,14 +11,16 @@ import java.util.Map;
  * @author Ian Murphy - 20057028
  */
 public class Converters {
-    private static MyStack<String> outStack = new MyStack<String>();
-    private static MyStack<String> opStack = new MyStack<String>();
 
     // Which side of the operator gets evaluated first
     private static int LEFTASSOC = 0;
     private static int RIGHTASSOC = 1; //Not used as not implementing square roots yet
 
-    //Operators - Map to allow for more operations to be added easily
+    /**
+     * Map to allow for easier addition of operators in future.
+     * Maps an operator to a primitive array of ints, the first value is
+     * a measure of its precedence. The second holds the asscociativity.
+     */
     private static final Map<String, int[]> OPERATORS = new HashMap<String, int[]>();
     static {
         OPERATORS.put("+", new int[] { 0, LEFTASSOC });
@@ -31,6 +31,7 @@ public class Converters {
 
     /**
      * Check whether a token is an operator or not.
+     *
      * @param token  The token being checked
      * @return true if the token is an operator
      */
@@ -40,6 +41,7 @@ public class Converters {
 
     /**
      * Test associativity of an operator token.
+     *
      * @param token The token being checked
      * @param type LEFTASSOC or RIGHTASSOC
      * @return True if the token type is the same as param type
@@ -77,9 +79,6 @@ public class Converters {
         MyStack<String> opStack = new MyStack<String>();
 
         String[] tokens = s.split(" ");
-        //for (String token : tokens) {
-        //    System.out.print(token + " ");
-       // }
         for (String token: tokens) {
             if (isOperator(token)) {
                 // If token is an operator enter here
@@ -112,10 +111,8 @@ public class Converters {
             sb.append(outStack.pop() + " ");
         }
 
-       // while (it.hasNext()) {
-        //    sb.append(outStack.pop());
-         //   sb.append(" ");
-        //}
+        // Reverse the string before returning so that it prints the top of the Stack
+        // last and it is in correct RPN format.
         return sb.reverse().toString();
     }
 

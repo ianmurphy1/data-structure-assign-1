@@ -74,7 +74,7 @@ public class Converters {
      * @param s The string to be converted
      * @return A String of the postfix equivalent of the inputted expression
      */
-    public static String infixToPostfix(String s) {
+    public static MyStack<String> infixToPostfix(String s) {
         MyStack<String> outStack = new MyStack<String>();
         MyStack<String> opStack = new MyStack<String>();
 
@@ -83,6 +83,7 @@ public class Converters {
             if (isOperator(token)) {
                 // If token is an operator enter here
                 while (!opStack.isEmpty() && isOperator(opStack.peek())) {
+                    // Check precedence of the token against what's on top of stack currently
                     if (isAssoc(token, LEFTASSOC) && checkPrecedence(token, opStack.peek()) <= 0
                         || isAssoc(token, RIGHTASSOC) && checkPrecedence(token, opStack.peek()) < 0) {
                         outStack.push(opStack.pop());
@@ -104,16 +105,9 @@ public class Converters {
             outStack.push(opStack.pop());
         }
 
-        Iterator<String> it = outStack.iterator();
-        StringBuilder sb = new StringBuilder();
-        System.out.println(outStack.toString());
-        for (String str : outStack) {
-            sb.append(outStack.pop() + " ");
-        }
-
         // Reverse the string before returning so that it prints the top of the Stack
         // last and it is in correct RPN format.
-        return sb.reverse().toString();
+        return outStack;
     }
 
     public static String postfixToInfix(String s) {
@@ -143,9 +137,17 @@ public class Converters {
 
     public static void main(String[] args) {
         String input = "( 1 + 2 ) * ( 3 / 4 )";
-        String output = infixToPostfix(input);
+        MyStack<String> out = infixToPostfix(input);
+        StringBuilder output = new StringBuilder();
 
-        System.out.println(output);
+        for (String str: out) {
+            output.append(str + " ");
+        }
+        output.deleteCharAt(output.length() - 1);
+        System.out.println("Input: " + input);
+        System.out.println("RPN: " + output.reverse().toString());
+        System.out.println("Answer = " + Calculators.calculate(out));
+
     }
 
 

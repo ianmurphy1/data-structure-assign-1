@@ -125,4 +125,7 @@ public class CalcEngine
         return("Ver. 1.0");
     }
 
+    public void point() {
+        displayValue = displayValue + .0;
+    }
 }

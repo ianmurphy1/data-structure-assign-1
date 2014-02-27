@@ -2,6 +2,7 @@ package calc;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.DecimalFormat;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -118,6 +119,9 @@ public class UserInterface implements ActionListener
             calc.numberPressed(number);
             str += command;
             System.out.println(str);
+        } else if (command.equals(".")) {
+            calc.point();
+            str += ".";
         }
         else if(command.equals("+")) {
             calc.plus();
@@ -129,8 +133,11 @@ public class UserInterface implements ActionListener
         }
         else if(command.equals("="))
             calc.equals(str);
-        else if(command.equals("C"))
+        else if(command.equals("C")) {
             calc.clear();
+            str = "";
+            System.out.println("String Cleared: ");
+        }
         else if(command.equals("*")) {
             calc.multiply();
             str += " " + "*" + " ";
@@ -148,7 +155,11 @@ public class UserInterface implements ActionListener
      */
     private void redisplay()
     {
-        display.setText("" + calc.getDisplayValue());
+        int i = (int) calc.getDisplayValue();
+        DecimalFormat whole = new DecimalFormat("#");
+        if (Double.compare(calc.getDisplayValue(), i) == 0)
+            display.setText("" + whole.format(calc.getDisplayValue()));
+        else display.setText("" + calc.getDisplayValue());
     }
 
     /**

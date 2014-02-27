@@ -21,15 +21,30 @@ public class Calculators {
         MyStack<String> opStack = new MyStack<String>();
         MyStack<Double> outStack = new MyStack<Double>();
 
-        while (!inStack.isEmpty()) {
+        while (true) {
+            if (inStack.isEmpty()) break;
             while (isOp(inStack.peek())) {
                 opStack.push(inStack.pop());
             }
+            String test = inStack.pop();
+            if (isNumber(test) && isOp(inStack.peek())) {
+                outStack.push(Double.parseDouble(test));
+                continue;  //Jump back to start of loop
+            }
+            inStack.push(test);
             outStack.push(eval(opStack.pop(), Double.parseDouble(inStack.pop()), Double.parseDouble(inStack.pop())));
         }
-        while (!opStack.isEmpty()) outStack.push(eval(opStack.pop(), outStack.pop(), outStack.pop()));
+        while (!opStack.isEmpty()) {
+            // Order of operands has flipped once reaching here
+            double op1, op2;
+            op1 = outStack.pop();
+            op2 = outStack.pop();
+            outStack.push(eval(opStack.pop(), op2, op1));
+        }
         return outStack.pop();
     }
+
+    private static boolean isNumber(String s) { return s.matches("((-|\\\\+)?[0-9]+(\\\\.[0-9]+)?)+"); }
 
     /**
      * Method that checks whether a string token passed into it is an operator

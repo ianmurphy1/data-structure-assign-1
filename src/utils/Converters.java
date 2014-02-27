@@ -147,7 +147,33 @@ public class Converters {
         System.out.println("Input: " + input);
         System.out.println("RPN: " + output.reverse().toString());
         System.out.println("Answer = " + Calculators.calculate(out));
+        System.out.println("Expected Answer = " + 2.25 + "\n");
 
+        out = new MyStack<String>();
+        input = "( 10 + 25 ) * 6";
+        out = infixToPostfix(input);
+        output = new StringBuilder();
+        for (String str: out) {
+            output.append(str + " ");
+        }
+        output.deleteCharAt(output.length() - 1);
+        System.out.println("Input: " + input);
+        System.out.println("RPN: " + output.reverse().toString());
+        System.out.println("Answer = " + Calculators.calculate(out));
+        System.out.println("Expected Answer = " + 210 + "\n");
+
+        out = new MyStack<String>();
+        input = "( -3 + 8 ) - ( 3 * ( -9 ) )";
+        out = infixToPostfix(input);
+        output = new StringBuilder();
+        for (String str: out) {
+            output.append(str + " ");
+        }
+        output.deleteCharAt(output.length() - 1);
+        System.out.println("Input: " + input);
+        System.out.println("RPN: " + output.reverse().toString());
+        System.out.println("Answer = " + Calculators.calculate(out));
+        System.out.println("Expected Answer = " + 32);
     }
 
 

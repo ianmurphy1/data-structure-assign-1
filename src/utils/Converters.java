@@ -141,7 +141,8 @@ public class Converters {
         StringBuilder output = new StringBuilder();
 
         for (String str: out) {
-            output.append(str + " ");
+            String s = new StringBuffer(str).reverse().toString();
+            output.append(s + " ");
         }
         output.deleteCharAt(output.length() - 1);
         System.out.println("Input: " + input);
@@ -154,7 +155,8 @@ public class Converters {
         out = infixToPostfix(input);
         output = new StringBuilder();
         for (String str: out) {
-            output.append(str + " ");
+            String s = new StringBuffer(str).reverse().toString();
+            output.append(s + " ");
         }
         output.deleteCharAt(output.length() - 1);
         System.out.println("Input: " + input);
@@ -167,7 +169,8 @@ public class Converters {
         out = infixToPostfix(input);
         output = new StringBuilder();
         for (String str: out) {
-            output.append(str + " ");
+            String s = new StringBuffer(str).reverse().toString();
+            output.append(s + " ");
         }
         output.deleteCharAt(output.length() - 1);
         System.out.println("Input: " + input);

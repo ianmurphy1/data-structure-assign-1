@@ -37,13 +37,18 @@ public class Calculators {
         while (!opStack.isEmpty()) {
             // Order of operands has flipped once reaching here
             double op1, op2;
-            op1 = outStack.pop();
             op2 = outStack.pop();
-            outStack.push(eval(opStack.pop(), op2, op1));
+            op1 = outStack.pop();
+            outStack.push(eval(opStack.pop(), op1, op2));
         }
         return outStack.pop();
     }
 
+    /**
+     * Method to check whether a string is a number or not
+     * @param s String to be checked
+     * @return true it's a number, false otherwise
+     */
     private static boolean isNumber(String s) { return s.matches("((-|\\\\+)?[0-9]+(\\\\.[0-9]+)?)+"); }
 
     /**

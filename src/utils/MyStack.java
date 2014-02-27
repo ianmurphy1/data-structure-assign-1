@@ -46,6 +46,7 @@ public class MyStack<E> implements Iterable<E> {
         E item = top.item;
         top = top.next;
         count--;
+        if (count == 0) top = null;
         return item;
     }
 
@@ -67,8 +68,11 @@ public class MyStack<E> implements Iterable<E> {
     public int size() { return count; }
 
     /**
+     * Method to return a string showing the elements of the stack
+     * the top gets printed first so the output from the stack reads
+     * from left to right as top to bottom.
      *
-     * @return
+     * @return String version of stack.
      */
     @Override
     public String toString() {
@@ -125,5 +129,35 @@ public class MyStack<E> implements Iterable<E> {
     private static class Frame<E> {
         E item;
         Frame<E> next;
+    }
+
+    /**
+     * Test area for the stack.
+     *
+     * @param args
+     */
+    public static void main(String[] args) {
+        MyStack<String> stack = new MyStack<String>();
+        // Test: thirdin should print to console first
+        String[] random = { "firstin", "secondin", "thirdin" };
+
+        for (String str : random) stack.push(str);
+
+        while (!stack.isEmpty()) System.out.println(stack.pop());
+        System.out.println();
+
+        for (String str : random) stack.push(str);
+        // Test the stacks iterator class
+        // Should print the same as the for loop
+        System.out.println();
+        Iterator<String> it = stack.iterator();
+        while (it.hasNext()) System.out.println(it.next());
+
+        System.out.println();
+        for (String s : stack) {
+            System.out.println(s);
+        }
+
+        // All tests should return the same result.
     }
 }

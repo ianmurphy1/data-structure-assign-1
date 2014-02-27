@@ -1,5 +1,7 @@
 package calc;
 
+import utils.Calculators;
+import utils.Converters;
 import utils.MyStack;
 
 import java.util.Stack;
@@ -12,14 +14,8 @@ import java.util.Stack;
  */
 public class CalcEngine
 {
-    MyStack<String> opandStack = new MyStack<String>();
-    MyStack<String> operatorStack = new MyStack<String>();
-
-    Stack<String> opanStack = new Stack<String>();
-    Stack<String> operStack = new Stack<String>();
-
     char operator;
-    int displayValue, operand1;
+    double displayValue, operand1;
 
     /**
      * Create a CalcEngine instance. Initialise its state so that it is ready 
@@ -36,7 +32,7 @@ public class CalcEngine
      * Return the value that should currently be displayed on the calculator
      * display.
      */
-    public int getDisplayValue()
+    public double getDisplayValue()
     {
         return(displayValue);
     }
@@ -87,25 +83,10 @@ public class CalcEngine
     /**
      * The '=' button was pressed.
      */
-    public void equals()
+    public void equals(String infix)
     {
-        if (operator == '+') {
-            displayValue += operand1;
-            operand1 = 0;
-        }
-        else if (operator == '-') {
-            displayValue = operand1-displayValue;
-            operand1 = 0;
-        }
-        else if (operator == '*') {
-            displayValue = operand1*displayValue;
-            operand1 = 0;
-        }
-        else if (operator == '/') {
-            displayValue = operand1/displayValue;
-            operand1 = 0;
-        }
-
+        MyStack<String> rpn = Converters.infixToPostfix(infix);
+        displayValue = Calculators.calculate(rpn);
     }
 
     /**
@@ -115,7 +96,6 @@ public class CalcEngine
     {
         displayValue = 0;
         operand1 = 0;
-
     }
 
 

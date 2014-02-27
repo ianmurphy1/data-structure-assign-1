@@ -17,7 +17,7 @@ public class UserInterface implements ActionListener
 {
     private CalcEngine calc;
     private boolean showingAuthor;
-
+    private String str;
     private JFrame frame;
     private JTextField display;
     private JLabel status;
@@ -28,6 +28,7 @@ public class UserInterface implements ActionListener
     public UserInterface(CalcEngine engine)
     {
         calc = engine;
+        str = "";
         showingAuthor = true;
         makeFrame();
         frame.setVisible(true);
@@ -56,22 +57,26 @@ public class UserInterface implements ActionListener
         display = new JTextField();
         contentPane.add(display, BorderLayout.NORTH);
 
-        JPanel buttonPanel = new JPanel(new GridLayout(4, 4));
+        JPanel buttonPanel = new JPanel(new GridLayout(5, 4));
+        addButton(buttonPanel, "C");
+        addButton(buttonPanel, "(");
+        addButton(buttonPanel, ")");
+        addButton(buttonPanel, "/");
         addButton(buttonPanel, "7");
         addButton(buttonPanel, "8");
         addButton(buttonPanel, "9");
-        addButton(buttonPanel, "C");
+        addButton(buttonPanel, "*");
         addButton(buttonPanel, "4");
         addButton(buttonPanel, "5");
         addButton(buttonPanel, "6");
-        addButton(buttonPanel, "*");
+        addButton(buttonPanel, "+");
         addButton(buttonPanel, "1");
         addButton(buttonPanel, "2");
         addButton(buttonPanel, "3");
-        addButton(buttonPanel, "/");
+        addButton(buttonPanel, "*");
         addButton(buttonPanel, "0");
-        addButton(buttonPanel, "+");
-        addButton(buttonPanel, "-");
+        addButton(buttonPanel, " ");
+        addButton(buttonPanel, ".");
         addButton(buttonPanel, "=");
         contentPane.add(buttonPanel, BorderLayout.CENTER);
 
@@ -98,7 +103,6 @@ public class UserInterface implements ActionListener
     public void actionPerformed(ActionEvent event)
     {
         String command = event.getActionCommand();
-
         if(command.equals("0") ||
                 command.equals("1") ||
                 command.equals("2") ||
@@ -112,20 +116,29 @@ public class UserInterface implements ActionListener
         {
             int number = Integer.parseInt(command);
             calc.numberPressed(number);
+            str += command;
+            System.out.println(str);
         }
-        else if(command.equals("+"))
+        else if(command.equals("+")) {
             calc.plus();
-        else if(command.equals("-"))
+            str += " " + "+" + " ";
+        }
+        else if(command.equals("-")) {
             calc.minus();
+            str += " " + "-" + " ";
+        }
         else if(command.equals("="))
-            calc.equals();
+            calc.equals(str);
         else if(command.equals("C"))
             calc.clear();
-        else if(command.equals("*"))
+        else if(command.equals("*")) {
             calc.multiply();
-        else if(command.equals("/"))
+            str += " " + "*" + " ";
+        }
+        else if(command.equals("/")) {
             calc.divide();
-
+            str += " " + "/" + " ";
+        }
         redisplay();
     }
 

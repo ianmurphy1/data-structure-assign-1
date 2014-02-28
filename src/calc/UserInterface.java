@@ -1,9 +1,12 @@
 package calc;
 
+import utils.Calculators;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.Arc2D;
 import java.text.DecimalFormat;
+import java.util.regex.Pattern;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -19,7 +22,6 @@ public class UserInterface implements ActionListener
 {
     private CalcEngine calc;
     private boolean showingAuthor;
-    private String str;
     private JFrame frame;
     private JTextField display;
     private JLabel status;
@@ -32,7 +34,6 @@ public class UserInterface implements ActionListener
     {
         pointPressed = 0;
         calc = engine;
-        str = "";
         showingAuthor = true;
         makeFrame();
         frame.setVisible(true);
@@ -77,7 +78,7 @@ public class UserInterface implements ActionListener
         addButton(buttonPanel, "1");
         addButton(buttonPanel, "2");
         addButton(buttonPanel, "3");
-        addButton(buttonPanel, "*");
+        addButton(buttonPanel, "-");
         addButton(buttonPanel, "0");
         addButton(buttonPanel, " ");
         addButton(buttonPanel, ".");
@@ -120,48 +121,47 @@ public class UserInterface implements ActionListener
         {
             int number = Integer.parseInt(command);
             calc.numberPressed(number);
-            str += command;
-            System.out.println(str);
         } else if (command.equals(".")) {
             calc.pointPressed();
             pointPressed += 1;
-            if (pointPressed == 1) str += ".";
-
         }
         else if(command.equals("+")) {
             calc.plus();
-            str += " " + "+" + " ";
             pointPressed = 0;
         }
         else if(command.equals("-")) {
-            calc.minus();
-            str += " " + "-" + " ";
-            pointPressed = 0;
+            String str = calc.getDisplayValue(pointPressed);
+            if (str.isEmpty() || str.charAt(str.length() - 1) == ' ') {
+                calc.negate();
+            } else {
+                pointPressed = 0;
+                calc.minus();
+            }
         }
         else if(command.equals("=")) {
             try {
-                calc.equals(str);
+                calc.equals();
             } catch (ArithmeticException e) {
-                display.setText(calc.getDisplayValue());
+                display.setText(calc.getDisplayValue(pointPressed));
             }
-            str = "";
             pointPressed = 0;
         }
         else if(command.equals("C")) {
             calc.clear();
-            str = "";
             pointPressed = 0;
             System.out.println("String Cleared: ");
         }
         else if(command.equals("*")) {
             calc.multiply();
-            str += " " + "*" + " ";
             pointPressed = 0;
         }
-        else if(command.equals("/")) {
+        else if (command.equals("/")) {
             calc.divide();
-            str += " " + "/" + " ";
             pointPressed = 0;
+        } else if (command.equals("(")) {
+            calc.leftParen();
+        } else if (command.equals(")") ) {
+            calc.rightParen();
         }
         redisplay();
     }
@@ -171,17 +171,12 @@ public class UserInterface implements ActionListener
      * calculator.
      */
     private void redisplay() {
-        double d = Double.parseDouble(calc.getDisplayValue());
-        System.out.println("Redisplay value: " + d);
-        int i = (int) d;
-        DecimalFormat whole = new DecimalFormat("#");
-        if (Double.compare(d, i) == 0 && pointPressed == 0)
-            display.setText("" + whole.format(d));
-        else if (Double.compare(d, i) == 0 && pointPressed == 1) {
-            System.out.println("Redisplay once point is pressed: " + calc.getDisplayValue());
-            display.setText(calc.getDisplayValue());
-        }
-        else display.setText("" + calc.getDisplayValue());
+        display.setText(calc.getDisplayValue(pointPressed));
+    }
+
+    private static boolean isNumber(String s) {
+        if (Pattern.matches(fpRegex, s)) return true;
+        return false;
     }
 
     /**
@@ -197,4 +192,48 @@ public class UserInterface implements ActionListener
 
         showingAuthor = !showingAuthor;
     }
+
+    /**
+     * Regular expressions to check wheter a number is valid or not.
+     * These have been taken from the @see {@link java.lang.Double#valueOf(String s)} method
+     * where these are specified.
+     */
+    final static String Digits     = "(\\p{Digit}+)";
+    final static String HexDigits  = "(\\p{XDigit}+)";
+    // an exponent is 'e' or 'E' followed by an optionally
+    // signed decimal integer.
+    final static String Exp        = "[eE][+-]?"+Digits;
+    final static String fpRegex    =
+            ( "[\\x00-\\x20]*" +  // Optional leading "whitespace"
+                    "[+-]?(" + // Optional sign character
+                    "NaN|" +           // "NaN" string
+                    "Infinity|" +      // "Infinity" string
+
+                    // A decimal floating-point string representing a finite positive
+                    // number without a leading sign has at most five basic pieces:
+                    // Digits . Digits ExponentPart FloatTypeSuffix
+                    //
+                    // Since this method allows integer-only strings as input
+                    // in addition to strings of floating-point literals, the
+                    // two sub-patterns below are simplifications of the grammar
+                    // productions from the Java Language Specification, 2nd
+                    // edition, section 3.10.2.
+
+                    // Digits ._opt Digits_opt ExponentPart_opt FloatTypeSuffix_opt
+                    "(((" +Digits+ "(\\.)?(" + Digits + "?)(" + Exp + ")?)|" +
+
+                    // . Digits ExponentPart_opt FloatTypeSuffix_opt
+                    "(\\.(" + Digits + ")(" + Exp + ")?)|" +
+
+                    // Hexadecimal strings
+                    "((" +
+                    // 0[xX] HexDigits ._opt BinaryExponent FloatTypeSuffix_opt
+                    "(0[xX]" + HexDigits + "(\\.)?)|" +
+
+                    // 0[xX] HexDigits_opt . HexDigits BinaryExponent FloatTypeSuffix_opt
+                    "(0[xX]" + HexDigits + "?(\\.)" + HexDigits + ")" +
+
+                    ")[pP][+-]?" + Digits + "))" +
+                    "[fFdD]?))" +
+                    "[\\x00-\\x20]*");// Optional trailing "whitespace"
 }

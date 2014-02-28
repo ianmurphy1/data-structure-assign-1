@@ -151,6 +151,20 @@ public class Converters {
         System.out.println("Expected Answer = " + 2.25 + "\n");
 
         out = new MyStack<String>();
+        input = "10 * ( 4 + 2 )";
+        out = infixToPostfix(input);
+        output = new StringBuilder();
+        for (String str: out) {
+            String s = new StringBuffer(str).reverse().toString();
+            output.append(s + " ");
+        }
+        output.deleteCharAt(output.length() - 1);
+        System.out.println("Input: " + input);
+        System.out.println("RPN: " + output.reverse().toString());
+        System.out.println("Answer = " + Calculators.calculate(out));
+        System.out.println("Expected Answer = " + 20 + "\n");
+
+        out = new MyStack<String>();
         input = "( 10 + 25 ) * 6";
         out = infixToPostfix(input);
         output = new StringBuilder();
@@ -176,7 +190,35 @@ public class Converters {
         System.out.println("Input: " + input);
         System.out.println("RPN: " + output.reverse().toString());
         System.out.println("Answer = " + Calculators.calculate(out));
-        System.out.println("Expected Answer = " + 32);
+        System.out.println("Expected Answer = " + 32 + "\n");
+
+        out = new MyStack<String>();
+        input = "10 * ( 4 + 2 )";
+        out = infixToPostfix(input);
+        output = new StringBuilder();
+        for (String str: out) {
+            String s = new StringBuffer(str).reverse().toString();
+            output.append(s + " ");
+        }
+        output.deleteCharAt(output.length() - 1);
+        System.out.println("Input: " + input);
+        System.out.println("RPN: " + output.reverse().toString());
+        System.out.println("Answer = " + Calculators.calculate(out));
+        System.out.println("Expected Answer = " + 60 + "\n");
+
+        out = new MyStack<String>();
+        input = "2 * ( 5 + 2 )";
+        out = infixToPostfix(input);
+        output = new StringBuilder();
+        for (String str: out) {
+            String s = new StringBuffer(str).reverse().toString();
+            output.append(s + " ");
+        }
+        output.deleteCharAt(output.length() - 1);
+        System.out.println("Input: " + input);
+        System.out.println("RPN: " + output.reverse().toString());
+        System.out.println("Answer = " + Calculators.calculate(out));
+        System.out.println("Expected Answer = " + 14);
     }
 
 

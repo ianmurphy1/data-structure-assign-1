@@ -4,7 +4,9 @@ import utils.Calculators;
 import utils.Converters;
 import utils.MyStack;
 
+import java.text.DecimalFormat;
 import java.util.Stack;
+import java.util.regex.Pattern;
 
 /**
  * The main part of the calculator doing the calculations.
@@ -31,8 +33,18 @@ public class CalcEngine
      * Return the value that should currently be displayed on the calculator
      * display.
      */
-    public String getDisplayValue() {
-        System.out.println("Display val in engine: " + displayValue);
+    public String getDisplayValue(int pointPressed) {
+        if (isNumber(displayValue)) {
+            double d = Double.parseDouble(displayValue);
+            System.out.println("Redisplay value: " + d);
+            int i = (int) d;
+            DecimalFormat whole = new DecimalFormat("#");
+            if (Double.compare(d, i) == 0 && pointPressed == 0)
+                displayValue = whole.format(d);
+            else if (Double.compare(d, i) == 0 && pointPressed == 1) {
+                displayValue = displayValue;
+            }
+        } else displayValue = displayValue;
         return(displayValue);
     }
 
@@ -59,7 +71,7 @@ public class CalcEngine
     public void plus()
     {
         operand1 = displayValue;
-        displayValue = "0";
+        displayValue += " + ";
     }
 
     /**
@@ -68,31 +80,33 @@ public class CalcEngine
     public void minus()
     {
         operand1 = displayValue;
-        displayValue = "0";
+        displayValue += " - ";
     }
 
     public void multiply()
     {
         operand1 = displayValue;
-        displayValue = "0";
+        displayValue += " * ";
     }
 
     public void divide()
     {
         operand1 = displayValue;
-        displayValue = "0";
+        displayValue += " / ";
     }
 
     /**
      * The '=' button was pressed.
      */
-    public void equals(String infix)
+    public void equals()
     {
-        if (infix.isEmpty()) {
+        if (displayValue.isEmpty()) {
             displayValue = "0";
             return;
+        } else if (!displayValue.contains(" ")) {
+            return;
         }
-        MyStack<String> rpn = Converters.infixToPostfix(infix);
+        MyStack<String> rpn = Converters.infixToPostfix(displayValue);
         displayValue = Calculators.calculate(rpn) + "";
         if (Double.parseDouble(displayValue) == Double.NEGATIVE_INFINITY
             || Double.parseDouble(displayValue) == Double.POSITIVE_INFINITY) {
@@ -136,4 +150,67 @@ public class CalcEngine
         return("Ver. 1.0");
     }
 
+    public void negate() {
+        if (displayValue.charAt(0) == '0') displayValue = "-";
+        else displayValue += "-";
+    }
+
+    public void leftParen() {
+        if (displayValue.charAt(0) == '0') displayValue = "( ";
+        else displayValue += "( ";
+    }
+
+    public void rightParen() {
+        if (displayValue.charAt(0) == '0'); //do nothing
+        else displayValue += " )";
+    }
+
+    private static boolean isNumber(String s) {
+        if (Pattern.matches(fpRegex, s)) return true;
+        return false;
+    }
+
+    /**
+     * Regular expressions to check wheter a number is valid or not.
+     * These have been taken from the @see {@link java.lang.Double#valueOf(String s)} method
+     * where these are specified.
+     */
+    final static String Digits     = "(\\p{Digit}+)";
+    final static String HexDigits  = "(\\p{XDigit}+)";
+    // an exponent is 'e' or 'E' followed by an optionally
+    // signed decimal integer.
+    final static String Exp        = "[eE][+-]?"+Digits;
+    final static String fpRegex    =
+            ( "[\\x00-\\x20]*" +  // Optional leading "whitespace"
+                    "[+-]?(" + // Optional sign character
+                    "NaN|" +           // "NaN" string
+                    "Infinity|" +      // "Infinity" string
+
+                    // A decimal floating-point string representing a finite positive
+                    // number without a leading sign has at most five basic pieces:
+                    // Digits . Digits ExponentPart FloatTypeSuffix
+                    //
+                    // Since this method allows integer-only strings as input
+                    // in addition to strings of floating-point literals, the
+                    // two sub-patterns below are simplifications of the grammar
+                    // productions from the Java Language Specification, 2nd
+                    // edition, section 3.10.2.
+
+                    // Digits ._opt Digits_opt ExponentPart_opt FloatTypeSuffix_opt
+                    "(((" +Digits+ "(\\.)?(" + Digits + "?)(" + Exp + ")?)|" +
+
+                    // . Digits ExponentPart_opt FloatTypeSuffix_opt
+                    "(\\.(" + Digits + ")(" + Exp + ")?)|" +
+
+                    // Hexadecimal strings
+                    "((" +
+                    // 0[xX] HexDigits ._opt BinaryExponent FloatTypeSuffix_opt
+                    "(0[xX]" + HexDigits + "(\\.)?)|" +
+
+                    // 0[xX] HexDigits_opt . HexDigits BinaryExponent FloatTypeSuffix_opt
+                    "(0[xX]" + HexDigits + "?(\\.)" + HexDigits + ")" +
+
+                    ")[pP][+-]?" + Digits + "))" +
+                    "[fFdD]?))" +
+                    "[\\x00-\\x20]*");// Optional trailing "whitespace"
 }

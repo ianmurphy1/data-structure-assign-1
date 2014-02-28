@@ -60,11 +60,11 @@ public class Calculators {
      * @param s String to be checked
      * @return true it's a number, false otherwise
      */
-     private static boolean isNumber(String s) { return s.matches("((-|\\\\+)?[0-9]+(\\\\.[0-9]+)?)+"); }
-     /*private static boolean isNumber(String s) {
+     //private static boolean isNumber(String s) { return s.matches("((-|\\\\+)?[0-9]+(\\\\.[0-9]+)?)+"); }
+     private static boolean isNumber(String s) {
         if (Pattern.matches(fpRegex, s)) return true;
         return false;
-    }*/
+    }
 
     /**
      * Method that checks whether a string token passed into it is an operator

@@ -1,6 +1,7 @@
 package calc;
 
 import utils.Calculators;
+import utils.Converters;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -22,6 +23,7 @@ public class UserInterface implements ActionListener
 {
     private CalcEngine calc;
     private boolean showingAuthor;
+    private boolean negated;
     private JFrame frame;
     private JTextField display;
     private JLabel status;
@@ -37,6 +39,7 @@ public class UserInterface implements ActionListener
         showingAuthor = true;
         makeFrame();
         frame.setVisible(true);
+        negated = false;
     }
 
     /**
@@ -121,6 +124,7 @@ public class UserInterface implements ActionListener
         {
             int number = Integer.parseInt(command);
             calc.numberPressed(number);
+            negated = (negated == true) ? false : true;
         } else if (command.equals(".")) {
             calc.pointPressed();
             pointPressed += 1;
@@ -131,9 +135,28 @@ public class UserInterface implements ActionListener
         }
         else if(command.equals("-")) {
             String str = calc.getDisplayValue(pointPressed);
-            if (str.isEmpty() || str.charAt(str.length() - 1) == ' ') {
+            char a;
+            char b = '+';
+            a = str.charAt(str.length() - 1);
+            if (str.length() > 1) {
+                b = str.charAt(str.length() - 2);
+                System.out.println(b);
+            }
+
+            /**
+             * Check is the last operator exists, needs to check if a previous
+             * operator exists before it can negate. Logical OR will be true for the
+             * first part of the string if the display is 0.
+             */
+
+            if (str.charAt(0) == '0' || (a == ' ' && b == '-' || b == '(') ){
+                System.out.println("In negate. A: " + a + " B: " + b);
                 calc.negate();
+                negated = true;
+            } else if (negated == true) { // If a negation sign is awaiting a number do nothing
+                ;
             } else {
+                System.out.println("In minus. A: " + a + " B: " + b);
                 pointPressed = 0;
                 calc.minus();
             }

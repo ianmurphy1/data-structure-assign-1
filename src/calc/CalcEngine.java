@@ -16,8 +16,9 @@ import java.util.regex.Pattern;
  */
 public class CalcEngine
 {
-    char operator;
-    String displayValue, operand1;
+
+    String displayValue;
+    boolean solved;
 
     /**
      * Create a CalcEngine instance. Initialise its state so that it is ready 
@@ -26,7 +27,7 @@ public class CalcEngine
     public CalcEngine()
     {
         displayValue = "0";
-        operand1 = "0";
+        solved = false;
     }
 
     /**
@@ -54,6 +55,11 @@ public class CalcEngine
      */
     public void numberPressed(int number) {
         if (displayValue.charAt(0) == '0') displayValue = "";
+        if (solved == true) {
+            displayValue = "" + number;
+            solved = false;
+            return;
+        }
         displayValue = displayValue + number;
     }
 
@@ -62,44 +68,54 @@ public class CalcEngine
      */
     public void pointPressed() {
         displayValue = displayValue + ".";
+        if (solved == true) solved = false;
         //System.out.println(displayValue);
     }
 
     /**
      * The 'plus' button was pressed. 
      */
-    public void plus()
-    {
-        operand1 = displayValue;
+    public void plus() {
+        checkMultipleOps();
         displayValue += " + ";
+        if (solved == true) solved = false;
+    }
+
+    private void checkMultipleOps() {
+        if (displayValue.length() < 3) return;
+        char c = displayValue.charAt(displayValue.length() - 2);
+        System.out.println("Multiple op check before: " + displayValue + "|");
+        if (c == '+' || c == '-' || c == '*' || c == '/') {
+            displayValue = displayValue.substring(0, displayValue.length() - 3);
+            System.out.println("Multiple op check after: " + displayValue + "|");
+        }
     }
 
     /**
      * The 'minus' button was pressed.
      */
-    public void minus()
-    {
-        operand1 = displayValue;
+    public void minus() {
+        checkMultipleOps();
         displayValue += " - ";
+        if (solved == true) solved = false;
     }
 
-    public void multiply()
-    {
-        operand1 = displayValue;
+    public void multiply(){
+        checkMultipleOps();
         displayValue += " * ";
+        if (solved == true) solved = false;
     }
 
-    public void divide()
-    {
-        operand1 = displayValue;
+    public void divide() {
+        checkMultipleOps();
         displayValue += " / ";
+        if (solved == true) solved = false;
     }
 
     /**
      * The '=' button was pressed.
      */
-    public void equals()
-    {
+    public void equals() {
         if (displayValue.isEmpty()) {
             displayValue = "0";
             return;
@@ -113,6 +129,7 @@ public class CalcEngine
             displayValue = "MATH ERROR";
             throw new ArithmeticException();
         }
+        solved = true;
     }
 
     /**

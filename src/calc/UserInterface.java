@@ -2,6 +2,7 @@ package calc;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Arc2D;
 import java.text.DecimalFormat;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -22,12 +23,14 @@ public class UserInterface implements ActionListener
     private JFrame frame;
     private JTextField display;
     private JLabel status;
+    private int pointPressed;
 
     /**
      * Create a user interface for a given calcEngine.
      */
     public UserInterface(CalcEngine engine)
     {
+        pointPressed = 0;
         calc = engine;
         str = "";
         showingAuthor = true;
@@ -55,7 +58,7 @@ public class UserInterface implements ActionListener
         contentPane.setLayout(new BorderLayout(8, 8));
         contentPane.setBorder(new EmptyBorder( 10, 10, 10, 10));
 
-        display = new JTextField();
+        display = new JTextField("0");
         contentPane.add(display, BorderLayout.NORTH);
 
         JPanel buttonPanel = new JPanel(new GridLayout(5, 4));
@@ -120,31 +123,45 @@ public class UserInterface implements ActionListener
             str += command;
             System.out.println(str);
         } else if (command.equals(".")) {
-            calc.point();
-            str += ".";
+            calc.pointPressed();
+            pointPressed += 1;
+            if (pointPressed == 1) str += ".";
+
         }
         else if(command.equals("+")) {
             calc.plus();
             str += " " + "+" + " ";
+            pointPressed = 0;
         }
         else if(command.equals("-")) {
             calc.minus();
             str += " " + "-" + " ";
+            pointPressed = 0;
         }
-        else if(command.equals("="))
-            calc.equals(str);
+        else if(command.equals("=")) {
+            try {
+                calc.equals(str);
+            } catch (ArithmeticException e) {
+                display.setText(calc.getDisplayValue());
+            }
+            str = "";
+            pointPressed = 0;
+        }
         else if(command.equals("C")) {
             calc.clear();
             str = "";
+            pointPressed = 0;
             System.out.println("String Cleared: ");
         }
         else if(command.equals("*")) {
             calc.multiply();
             str += " " + "*" + " ";
+            pointPressed = 0;
         }
         else if(command.equals("/")) {
             calc.divide();
             str += " " + "/" + " ";
+            pointPressed = 0;
         }
         redisplay();
     }
@@ -153,12 +170,17 @@ public class UserInterface implements ActionListener
      * Update the interface display to show the current value of the
      * calculator.
      */
-    private void redisplay()
-    {
-        int i = (int) calc.getDisplayValue();
+    private void redisplay() {
+        double d = Double.parseDouble(calc.getDisplayValue());
+        System.out.println("Redisplay value: " + d);
+        int i = (int) d;
         DecimalFormat whole = new DecimalFormat("#");
-        if (Double.compare(calc.getDisplayValue(), i) == 0)
-            display.setText("" + whole.format(calc.getDisplayValue()));
+        if (Double.compare(d, i) == 0 && pointPressed == 0)
+            display.setText("" + whole.format(d));
+        else if (Double.compare(d, i) == 0 && pointPressed == 1) {
+            System.out.println("Redisplay once point is pressed: " + calc.getDisplayValue());
+            display.setText(calc.getDisplayValue());
+        }
         else display.setText("" + calc.getDisplayValue());
     }
 

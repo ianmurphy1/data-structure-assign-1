@@ -15,7 +15,7 @@ import java.util.Stack;
 public class CalcEngine
 {
     char operator;
-    double displayValue, operand1;
+    String displayValue, operand1;
 
     /**
      * Create a CalcEngine instance. Initialise its state so that it is ready 
@@ -23,17 +23,16 @@ public class CalcEngine
      */
     public CalcEngine()
     {
-        operator =' ';
-        displayValue=0;
-        operand1 = 0;
+        displayValue = "0";
+        operand1 = "0";
     }
 
     /**
      * Return the value that should currently be displayed on the calculator
      * display.
      */
-    public double getDisplayValue()
-    {
+    public String getDisplayValue() {
+        System.out.println("Display val in engine: " + displayValue);
         return(displayValue);
     }
 
@@ -41,9 +40,17 @@ public class CalcEngine
      * A number button was pressed. Do whatever you have to do to handle it.
      * The number value of the button is given as a parameter.
      */
-    public void numberPressed(int number)
-    {
-        displayValue = displayValue * 10 + number;
+    public void numberPressed(int number) {
+        if (displayValue.charAt(0) == '0') displayValue = "";
+        displayValue = displayValue + number;
+    }
+
+    /**
+     * Point pressed, added it to the string responsible for the displaying of text.
+     */
+    public void pointPressed() {
+        displayValue = displayValue + ".";
+        //System.out.println(displayValue);
     }
 
     /**
@@ -52,8 +59,7 @@ public class CalcEngine
     public void plus()
     {
         operand1 = displayValue;
-        displayValue = 0;
-        operator = '+';
+        displayValue = "0";
     }
 
     /**
@@ -62,22 +68,19 @@ public class CalcEngine
     public void minus()
     {
         operand1 = displayValue;
-        displayValue = 0;
-        operator = '-';
+        displayValue = "0";
     }
 
     public void multiply()
     {
         operand1 = displayValue;
-        displayValue = 0;
-        operator = '*';
+        displayValue = "0";
     }
 
     public void divide()
     {
         operand1 = displayValue;
-        displayValue = 0;
-        operator = '/';
+        displayValue = "0";
     }
 
     /**
@@ -85,8 +88,17 @@ public class CalcEngine
      */
     public void equals(String infix)
     {
+        if (infix.isEmpty()) {
+            displayValue = "0";
+            return;
+        }
         MyStack<String> rpn = Converters.infixToPostfix(infix);
-        displayValue = Calculators.calculate(rpn);
+        displayValue = Calculators.calculate(rpn) + "";
+        if (Double.parseDouble(displayValue) == Double.NEGATIVE_INFINITY
+            || Double.parseDouble(displayValue) == Double.POSITIVE_INFINITY) {
+            displayValue = "MATH ERROR";
+            throw new ArithmeticException();
+        }
     }
 
     /**
@@ -94,8 +106,7 @@ public class CalcEngine
      */
     public void clear()
     {
-        displayValue = 0;
-        operand1 = 0;
+        displayValue = "0";
     }
 
 
@@ -125,7 +136,4 @@ public class CalcEngine
         return("Ver. 1.0");
     }
 
-    public void point() {
-        displayValue = displayValue + .0;
-    }
 }

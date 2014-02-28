@@ -36,16 +36,12 @@ public class CalcEngine
      */
     public String getDisplayValue(int pointPressed) {
         if (isNumber(displayValue)) {
-            double d = Double.parseDouble(displayValue);
-            System.out.println("Redisplay value: " + d);
+            double d = Double.parseDouble(displayValue);            
             int i = (int) d;
             DecimalFormat whole = new DecimalFormat("#");
             if (Double.compare(d, i) == 0 && pointPressed == 0)
                 displayValue = whole.format(d);
-            else if (Double.compare(d, i) == 0 && pointPressed == 1) {
-                displayValue = displayValue;
-            }
-        } else displayValue = displayValue;
+        }
         return(displayValue);
     }
 
@@ -68,8 +64,7 @@ public class CalcEngine
      */
     public void pointPressed() {
         displayValue = displayValue + ".";
-        if (solved == true) solved = false;
-        //System.out.println(displayValue);
+        if (solved == true) solved = false;       
     }
 
     /**
@@ -80,14 +75,16 @@ public class CalcEngine
         displayValue += " + ";
         if (solved == true) solved = false;
     }
-
+    
+    /**
+     * Check for multiple operators. 
+     */
     private void checkMultipleOps() {
         if (displayValue.length() < 3) return;
         char c = displayValue.charAt(displayValue.length() - 2);
         System.out.println("Multiple op check before: " + displayValue + "|");
         if (c == '+' || c == '-' || c == '*' || c == '/') {
-            displayValue = displayValue.substring(0, displayValue.length() - 3);
-            System.out.println("Multiple op check after: " + displayValue + "|");
+            displayValue = displayValue.substring(0, displayValue.length() - 3);            
         }
     }
 
@@ -100,12 +97,18 @@ public class CalcEngine
         if (solved == true) solved = false;
     }
 
+    /**
+     * The multiply button was pressed
+     */
     public void multiply(){
         checkMultipleOps();
         displayValue += " * ";
         if (solved == true) solved = false;
     }
 
+    /**
+     * The division button was pressed
+     */
     public void divide() {
         checkMultipleOps();
         displayValue += " / ";
@@ -132,7 +135,22 @@ public class CalcEngine
         solved = true;
     }
 
-    /**
+    public void rightParen() {
+	    if (displayValue.charAt(0) == '0'); //do nothing
+	    else displayValue += " )";
+	}
+
+	public void negate() {
+	    if (displayValue.charAt(0) == '0') displayValue = "-";
+	    else displayValue += "-";
+	}
+
+	public void leftParen() {
+	    if (displayValue.charAt(0) == '0') displayValue = "( ";
+	    else displayValue += "( ";
+	}
+
+	/**
      * The 'C' (clear) button was pressed.
      */
     public void clear()
@@ -146,7 +164,7 @@ public class CalcEngine
      */
     public String getTitle()
     {
-        return("My Calculator");
+        return("Stack Calculator");
     }
 
     /**
@@ -155,7 +173,7 @@ public class CalcEngine
      */
     public String getAuthor()
     {
-        return("Joe Daly");
+        return("Ian Murphy");
     }
 
     /**
@@ -167,21 +185,6 @@ public class CalcEngine
         return("Ver. 1.0");
     }
 
-    public void negate() {
-        if (displayValue.charAt(0) == '0') displayValue = "-";
-        else displayValue += "-";
-    }
-
-    public void leftParen() {
-        if (displayValue.charAt(0) == '0') displayValue = "( ";
-        else displayValue += "( ";
-    }
-
-    public void rightParen() {
-        if (displayValue.charAt(0) == '0'); //do nothing
-        else displayValue += " )";
-    }
-
     private static boolean isNumber(String s) {
         if (Pattern.matches(fpRegex, s)) return true;
         return false;
@@ -189,7 +192,7 @@ public class CalcEngine
 
     /**
      * Regular expressions to check wheter a number is valid or not.
-     * These have been taken from the @see {@link java.lang.Double#valueOf(String s)} method
+     * These have been taken from the @see {@link Double#valueOf(String s)} method
      * where these are specified.
      */
     final static String Digits     = "(\\p{Digit}+)";

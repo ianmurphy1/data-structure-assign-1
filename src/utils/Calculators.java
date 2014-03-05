@@ -42,7 +42,6 @@ public class Calculators {
             outStack.push(eval(opStack.pop(), Double.parseDouble(inStack.pop()), Double.parseDouble(inStack.pop())));
         }
         while (!opStack.isEmpty()) {
-            // Order of operands has flipped once reaching here
             double op1, op2;
             op2 = outStack.pop();
             op1 = outStack.pop();
